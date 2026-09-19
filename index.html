@@ -1,0 +1,3369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#6c5ce7">
+<title>4X SMM OFFICIAL — Admin</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#6c5ce7;
+  --primary2:#8e7dff;
+  --dark:#11111d;
+  --bg:#f6f7fb;
+  --card:#fff;
+  --text:#171724;
+  --muted:#77778b;
+  --border:#e7e7ef;
+  --success:#10b981;
+  --danger:#ef4444;
+  --warning:#f59e0b;
+}
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.app{display:none}
+.sidebar{
+  position:fixed;
+  left:0;top:0;bottom:0;
+  width:255px;
+  background:var(--dark);
+  color:white;
+  padding:20px 14px;
+  z-index:50;
+  overflow:auto;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:4px 10px 24px;
+}
+.brand img{
+  width:43px;height:43px;
+  border-radius:13px;
+  object-fit:cover;
+}
+.brand-name{font-weight:800;font-size:15px}
+.brand-small{font-size:10px;color:#89899c;margin-top:3px}
+.nav-title{
+  font-size:10px;
+  color:#707084;
+  padding:14px 12px 7px;
+  text-transform:uppercase;
+  font-weight:800;
+}
+.nav{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  background:none;
+  color:#aaaabc;
+  padding:12px;
+  border-radius:11px;
+  margin:2px 0;
+  text-align:left;
+}
+.nav:hover,.nav.active{
+  background:rgba(108,92,231,.2);
+  color:#fff;
+}
+.nav-icon{width:21px;text-align:center}
+.main{
+  margin-left:255px;
+  padding:24px;
+  min-height:100vh;
+}
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:23px;
+}
+.menu{
+  display:none;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+}
+.title h1{font-size:23px}
+.title p{font-size:12px;color:var(--muted);margin-top:5px}
+.admin-pill{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  background:white;
+  border:1px solid var(--border);
+  padding:9px 13px;
+  border-radius:12px;
+}
+.avatar{
+  width:34px;height:34px;
+  border-radius:50%;
+  background:var(--primary);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+}
+.view{display:none}
+.view.active{display:block}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+.stat{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:18px;
+}
+.stat-icon{
+  width:38px;height:38px;
+  border-radius:11px;
+  background:#f0edff;
+  display:grid;
+  place-items:center;
+  margin-bottom:13px;
+}
+.stat-label{font-size:11px;color:var(--muted)}
+.stat-value{font-size:21px;font-weight:900;margin-top:4px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+.full{grid-column:1/-1}
+.head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:17px;
+}
+.card-title{font-size:15px;font-weight:850}
+.muted{font-size:11px;color:var(--muted)}
+.form-grid{display:grid;gap:13px}
+.form-group label{
+  display:block;
+  font-size:11px;
+  font-weight:750;
+  margin-bottom:6px;
+}
+.control{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px 12px;
+  outline:none;
+  background:white;
+}
+.control:focus{border-color:var(--primary)}
+textarea.control{min-height:90px;resize:vertical}
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.btn{
+  padding:11px 14px;
+  border-radius:10px;
+  font-weight:750;
+  font-size:12px;
+}
+.primary{background:var(--primary);color:#fff}
+.secondary{background:#f0edff;color:#5946d8}
+.success{background:#dcfce7;color:#15803d}
+.danger{background:#fee2e2;color:#b91c1c}
+.warning{background:#fef3c7;color:#a16207}
+.dark{background:#171724;color:#fff}
+.small{padding:8px 10px;font-size:10px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.table-wrap{overflow:auto}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+th,td{
+  text-align:left;
+  padding:12px 9px;
+  border-bottom:1px solid var(--border);
+  font-size:11px;
+}
+th{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+}
+.badge{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:9px;
+  font-weight:800;
+}
+.green{background:#dcfce7;color:#15803d}
+.yellow{background:#fef3c7;color:#a16207}
+.red{background:#fee2e2;color:#b91c1c}
+.blue{background:#dbeafe;color:#1d4ed8}
+.purple{background:#ede9fe;color:#6d28d9}
+.switch{
+  width:42px;height:23px;
+  border-radius:20px;
+  background:#ddd;
+  position:relative;
+}
+.switch:after{
+  content:"";
+  width:17px;height:17px;
+  border-radius:50%;
+  background:#fff;
+  position:absolute;
+  top:3px;left:3px;
+  transition:.2s;
+}
+.switch.on{background:var(--primary)}
+.switch.on:after{left:22px}
+.setting-box{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:13px;
+}
+.setting-title{
+  font-size:12px;
+  font-weight:850;
+  margin-bottom:12px;
+}
+.code{
+  background:#11111d;
+  color:#c4b5fd;
+  border-radius:9px;
+  padding:11px;
+  font-family:monospace;
+  font-size:10px;
+  word-break:break-all;
+}
+.notice{
+  background:#fff8e7;
+  border:1px solid #f6df9c;
+  color:#805d08;
+  border-radius:11px;
+  padding:11px;
+  font-size:10px;
+  line-height:1.6;
+}
+.search{
+  width:100%;
+  padding:11px 13px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  outline:none;
+}
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:200;
+  display:none;
+  background:#171724;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:10px;
+  font-size:11px;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.55);
+  padding:15px;
+}
+.modal.show{display:flex}
+.modal-card{
+  background:white;
+  width:100%;
+  max-width:620px;
+  max-height:90vh;
+  overflow:auto;
+  border-radius:19px;
+  padding:21px;
+}
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:17px;
+}
+.close{
+  background:#f1f1f5;
+  padding:7px 10px;
+  border-radius:8px;
+}
+.auth{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:linear-gradient(135deg,#11111d,#302467);
+}
+.auth-card{
+  width:100%;
+  max-width:410px;
+  background:white;
+  border-radius:22px;
+  padding:29px;
+}
+.auth-logo{
+  width:65px;height:65px;
+  border-radius:18px;
+  object-fit:cover;
+  display:block;
+  margin:0 auto 14px;
+}
+.auth-title{
+  text-align:center;
+  font-size:22px;
+  font-weight:900;
+}
+.auth-sub{
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  margin:7px 0 22px;
+}
+.mobile-nav{display:none}
+
+@media(max-width:1000px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:760px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.2s;
+  }
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:15px}
+  .menu{display:block}
+  .grid{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .stats{gap:10px}
+  .stat{padding:14px}
+  .stat-value{font-size:18px}
+  .admin-pill span{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ADMIN LOGIN -->
+<section id="authScreen" class="auth">
+
+  <div class="auth-card">
+
+    <img
+      id="authLogo"
+      class="auth-logo"
+      src="https://placehold.co/130x130/6c5ce7/ffffff?text=4X"
+    >
+
+    <div class="auth-title">Admin Panel</div>
+
+    <div class="auth-sub">
+      4X SMM OFFICIAL Management System
+    </div>
+
+    <form id="loginForm" class="form-grid">
+
+      <div class="form-group">
+        <label>Admin Email</label>
+        <input
+          id="email"
+          class="control"
+          type="email"
+          placeholder="Admin email"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input
+          id="password"
+          class="control"
+          type="password"
+          placeholder="Password"
+          required
+        >
+      </div>
+
+      <button class="btn primary" type="submit">
+        Secure Login
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+<!-- ADMIN APP -->
+<section id="app" class="app">
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+      <img
+        id="sideLogo"
+        src="https://placehold.co/100x100/6c5ce7/ffffff?text=4X"
+      >
+
+      <div>
+        <div class="brand-name" id="siteName">
+          4X SMM OFFICIAL
+        </div>
+        <div class="brand-small">
+          Administrator
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nav-title">Overview</div>
+
+    <button class="nav active" data-view="dashboard">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </button>
+
+    <div class="nav-title">Management</div>
+
+    <button class="nav" data-view="orders">
+      <span class="nav-icon">▤</span>
+      Orders
+    </button>
+
+    <button class="nav" data-view="services">
+      <span class="nav-icon">◈</span>
+      Services
+    </button>
+
+    <button class="nav" data-view="providers">
+      <span class="nav-icon">⚡</span>
+      API Providers
+    </button>
+
+    <button class="nav" data-view="users">
+      <span class="nav-icon">♙</span>
+      Users
+    </button>
+
+    <button class="nav" data-view="payments">
+      <span class="nav-icon">৳</span>
+      Payments
+    </button>
+
+    <div class="nav-title">Configuration</div>
+
+    <button class="nav" data-view="settings">
+      <span class="nav-icon">⚙</span>
+      Site Settings
+    </button>
+
+    <button class="nav" data-view="api">
+      <span class="nav-icon">{ }</span>
+      Panel API
+    </button>
+
+    <button class="nav" data-view="profit">
+      <span class="nav-icon">%</span>
+      Profit Manager
+    </button>
+
+    <button class="nav" data-view="support">
+      <span class="nav-icon">?</span>
+      Support Tickets
+    </button>
+
+    <div style="
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:15px;
+    ">
+      <button
+        class="nav"
+        id="logout"
+        style="color:#ff9a9a">
+        <span class="nav-icon">↪</span>
+        Logout
+      </button>
+    </div>
+
+  </aside>
+
+
+  <main class="main">
+
+    <div class="top">
+
+      <div style="display:flex;align-items:center;gap:11px">
+
+        <button class="menu" id="menuBtn">
+          ☰
+        </button>
+
+        <div class="title">
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSub">
+            Manage your SMM business.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="admin-pill">
+
+        <div class="avatar" id="avatar">
+          A
+        </div>
+
+        <span id="adminEmail">
+          Admin
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-icon">👤</div>
+          <div class="stat-label">Total Users</div>
+          <div class="stat-value" id="statUsers">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">▤</div>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="statOrders">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">৳</div>
+          <div class="stat-label">Revenue</div>
+          <div class="stat-value">
+            ৳<span id="statRevenue">0.00</span>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-icon">%</div>
+          <div class="stat-label">Total Profit</div>
+          <div class="stat-value">
+            ৳<span id="statProfit">0.00</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="grid">
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                Recent Orders
+              </div>
+              <div class="muted">
+                Latest customer activity
+              </div>
+            </div>
+
+            <button
+              class="btn secondary small"
+              onclick="openView('orders')">
+              View all
+            </button>
+          </div>
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>User</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="recentOrders"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                Quick Actions
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+
+            <button
+              class="btn primary"
+              onclick="openView('services')">
+              + Add Service
+            </button>
+
+            <button
+              class="btn secondary"
+              onclick="openView('providers')">
+              Connect API
+            </button>
+
+            <button
+              class="btn warning"
+              onclick="openView('payments')">
+              Payment Requests
+            </button>
+
+            <button
+              class="btn dark"
+              onclick="openView('settings')">
+              Site Settings
+            </button>
+
+          </div>
+
+          <div class="notice" style="margin-top:15px">
+            API secrets should be stored through your secure Vercel
+            backend/environment variables. Do not expose provider secrets
+            in frontend JavaScript.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ORDERS -->
+    <div class="view" id="view-orders">
+
+      <div class="card">
+
+        <div class="head">
+
+          <div>
+            <div class="card-title">
+              Order Management
+            </div>
+            <div class="muted">
+              Manage automatic and manual order statuses.
+            </div>
+          </div>
+
+          <button
+            class="btn secondary small"
+            id="refreshOrders">
+            ↻ Refresh
+          </button>
+
+        </div>
+
+        <input
+          id="orderSearch"
+          class="search"
+          placeholder="Search order ID, user or service..."
+        >
+
+        <div class="table-wrap" style="margin-top:14px">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Service</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Profit</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="ordersTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SERVICES -->
+    <div class="view" id="view-services">
+
+      <div class="grid">
+
+        <div class="card full">
+
+          <div class="head">
+
+            <div>
+              <div class="card-title">
+                Service Manager
+              </div>
+
+              <div class="muted">
+                Import services from providers or create them manually.
+              </div>
+            </div>
+
+            <div class="actions">
+
+              <button
+                class="btn secondary"
+                id="syncServices">
+                ↻ Sync Provider
+              </button>
+
+              <button
+                class="btn primary"
+                id="addService">
+                + Add Service
+              </button>
+
+            </div>
+
+          </div>
+
+          <input
+            id="serviceSearch"
+            class="search"
+            placeholder="Search service..."
+          >
+
+          <div class="table-wrap" style="margin-top:14px">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Service</th>
+                  <th>Provider</th>
+                  <th>Cost</th>
+                  <th>Profit %</th>
+                  <th>Selling Rate</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="servicesTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROVIDERS -->
+    <div class="view" id="view-providers">
+
+      <div class="grid">
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                SMMGen API
+              </div>
+              <div class="muted">
+                Provider connection settings
+              </div>
+            </div>
+
+            <span
+              id="smmStatus"
+              class="badge yellow">
+              Not Connected
+            </span>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>API URL</label>
+              <input
+                id="smmUrl"
+                class="control"
+                placeholder="https://provider.example/api/v2"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>API Key</label>
+              <input
+                id="smmKey"
+                class="control"
+                type="password"
+                placeholder="Enter provider API key"
+              >
+            </div>
+
+            <div class="row">
+
+              <div class="form-group">
+                <label>Provider Name</label>
+                <input
+                  id="smmName"
+                  class="control"
+                  value="SMMGen"
+                >
+              </div>
+
+              <div class="form-group">
+                <label>Enabled</label>
+
+                <button
+                  id="smmEnabled"
+                  class="switch"
+                  type="button">
+                </button>
+
+              </div>
+
+            </div>
+
+            <div class="actions">
+
+              <button
+                class="btn primary"
+                id="saveSmm">
+                Save Provider
+              </button>
+
+              <button
+                class="btn secondary"
+                id="testSmm">
+                Test Connection
+              </button>
+
+              <button
+                class="btn dark"
+                id="syncSmm">
+                Sync Services
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                ZiniPay
+              </div>
+              <div class="muted">
+                Automatic payment gateway
+              </div>
+            </div>
+
+            <span
+              id="ziniStatus"
+              class="badge yellow">
+              Not Connected
+            </span>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>API / Gateway URL</label>
+              <input
+                id="ziniUrl"
+                class="control"
+                placeholder="ZiniPay API URL"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Merchant / API Credential</label>
+              <input
+                id="ziniKey"
+                class="control"
+                type="password"
+                placeholder="Enter secret credential"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Webhook URL</label>
+              <div class="code" id="webhookUrl">
+                https://YOUR-DOMAIN.vercel.app/api/payment/webhook
+              </div>
+            </div>
+
+            <div class="actions">
+
+              <button
+                class="btn primary"
+                id="saveZini">
+                Save Gateway
+              </button>
+
+              <button
+                class="btn secondary"
+                id="testZini">
+                Test Connection
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- USERS -->
+    <div class="view" id="view-users">
+
+      <div class="card">
+
+        <div class="head">
+          <div>
+            <div class="card-title">
+              User Management
+            </div>
+            <div class="muted">
+              View balances and account status.
+            </div>
+          </div>
+        </div>
+
+        <input
+          id="userSearch"
+          class="search"
+          placeholder="Search by name or email..."
+        >
+
+        <div class="table-wrap" style="margin-top:14px">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Balance</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="usersTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PAYMENTS -->
+    <div class="view" id="view-payments">
+
+      <div class="card">
+
+        <div class="head">
+          <div>
+            <div class="card-title">
+              Payment Management
+            </div>
+            <div class="muted">
+              Manual deposits and payment gateway transactions.
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Method</th>
+                <th>Amount</th>
+                <th>Trx ID</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="paymentsTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SETTINGS -->
+    <div class="view" id="view-settings">
+
+      <div class="grid">
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                Branding
+              </div>
+              <div class="muted">
+                Change your public panel appearance.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>Site Name</label>
+              <input
+                id="siteNameInput"
+                class="control"
+                value="4X SMM OFFICIAL"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Logo URL</label>
+              <input
+                id="logoUrl"
+                class="control"
+                placeholder="https://example.com/logo.png"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Favicon URL</label>
+              <input
+                id="faviconUrl"
+                class="control"
+                placeholder="https://example.com/favicon.png"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Primary Color</label>
+              <input
+                id="primaryColor"
+                class="control"
+                type="text"
+                value="#6c5ce7"
+              >
+            </div>
+
+            <button
+              class="btn primary"
+              id="saveBranding">
+              Save Branding
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                Manual Payments
+              </div>
+              <div class="muted">
+                Customer payment numbers.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>bKash</label>
+              <input
+                id="bkash"
+                class="control"
+                placeholder="01XXXXXXXXX"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Nagad</label>
+              <input
+                id="nagad"
+                class="control"
+                placeholder="01XXXXXXXXX"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Rocket</label>
+              <input
+                id="rocket"
+                class="control"
+                placeholder="01XXXXXXXXX"
+              >
+            </div>
+
+            <div class="form-group">
+              <label>Payment Instructions</label>
+              <textarea
+                id="paymentInstructions"
+                class="control"
+                placeholder="Write payment instructions...">
+              </textarea>
+            </div>
+
+            <button
+              class="btn primary"
+              id="savePayments">
+              Save Payment Settings
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PANEL API -->
+    <div class="view" id="view-api">
+
+      <div class="grid">
+
+        <div class="card full">
+
+          <div class="head">
+
+            <div>
+              <div class="card-title">
+                Reseller API
+              </div>
+              <div class="muted">
+                Let other panels use 4X SMM OFFICIAL as their provider.
+              </div>
+            </div>
+
+            <span class="badge green">
+              API v2
+            </span>
+
+          </div>
+
+          <div class="setting-box">
+
+            <div class="setting-title">
+              API Endpoint
+            </div>
+
+            <div class="code">
+              https://YOUR-DOMAIN.vercel.app/api/v2
+            </div>
+
+          </div>
+
+          <div class="setting-box">
+
+            <div class="setting-title">
+              Supported Actions
+            </div>
+
+            <div class="muted" style="line-height:2">
+              balance<br>
+              services<br>
+              add<br>
+              status<br>
+              refill<br>
+              cancel
+            </div>
+
+          </div>
+
+          <div class="notice">
+            API authentication and order processing should be handled by
+            Vercel server-side routes. Never place the master API secret
+            inside this HTML file.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROFIT -->
+    <div class="view" id="view-profit">
+
+      <div class="grid">
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                Global Profit
+              </div>
+              <div class="muted">
+                Default markup for imported services.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>Global Profit %</label>
+
+              <input
+                id="globalProfit"
+                class="control"
+                type="number"
+                min="0"
+                step="0.01"
+                value="20"
+              >
+
+            </div>
+
+            <div class="notice">
+              Example: Provider cost ৳100 with 20% markup =
+              customer price ৳120.
+            </div>
+
+            <button
+              class="btn primary"
+              id="saveProfit">
+              Save Profit Settings
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="head">
+            <div>
+              <div class="card-title">
+                Profit Calculation
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="row">
+
+              <div class="form-group">
+                <label>Provider Cost</label>
+                <input
+                  id="profitCost"
+                  class="control"
+                  type="number"
+                  value="100"
+                >
+              </div>
+
+              <div class="form-group">
+                <label>Profit %</label>
+                <input
+                  id="profitPercent"
+                  class="control"
+                  type="number"
+                  value="20"
+                >
+              </div>
+
+            </div>
+
+            <div class="card"
+                 style="background:#faf9ff;padding:15px">
+
+              <div class="muted">
+                Selling Price
+              </div>
+
+              <div
+                style="font-size:23px;font-weight:900;margin-top:5px">
+                ৳<span id="calculatedPrice">120.00</span>
+              </div>
+
+              <div class="muted" style="margin-top:5px">
+                Profit:
+                ৳<span id="calculatedProfit">20.00</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SUPPORT -->
+    <div class="view" id="view-support">
+
+      <div class="card">
+
+        <div class="head">
+          <div>
+            <div class="card-title">
+              Support Tickets
+            </div>
+            <div class="muted">
+              Manage customer support requests.
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Ticket</th>
+                <th>User</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="ticketsTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
+
+
+<!-- SERVICE MODAL -->
+<div class="modal" id="serviceModal">
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div>
+        <div class="card-title">
+          Add / Edit Service
+        </div>
+        <div class="muted">
+          Configure service pricing and profit.
+        </div>
+      </div>
+
+      <button
+        class="close"
+        onclick="closeServiceModal()">
+        ✕
+      </button>
+
+    </div>
+
+    <form id="serviceForm" class="form-grid">
+
+      <input type="hidden" id="editServiceId">
+
+      <div class="form-group">
+        <label>Service Name</label>
+        <input
+          id="serviceName"
+          class="control"
+          required
+        >
+      </div>
+
+      <div class="row">
+
+        <div class="form-group">
+          <label>Category</label>
+          <input
+            id="serviceCategory"
+            class="control"
+            placeholder="Instagram"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Provider</label>
+          <input
+            id="serviceProvider"
+            class="control"
+            placeholder="SMMGen"
+          >
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="form-group">
+          <label>Provider Service ID</label>
+          <input
+            id="providerServiceId"
+            class="control"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Provider Cost / 1000</label>
+          <input
+            id="serviceCost"
+            class="control"
+            type="number"
+            step="0.0001"
+            required
+          >
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="form-group">
+          <label>Profit %</label>
+          <input
+            id="serviceProfit"
+            class="control"
+            type="number"
+            step="0.01"
+            value="20"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Selling Rate / 1000</label>
+          <input
+            id="serviceRate"
+            class="control"
+            type="number"
+            step="0.0001"
+            required
+          >
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="form-group">
+          <label>Minimum</label>
+          <input
+            id="serviceMin"
+            class="control"
+            type="number"
+            value="10"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Maximum</label>
+          <input
+            id="serviceMax"
+            class="control"
+            type="number"
+            value="10000"
+          >
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          type="button"
+          class="btn secondary"
+          id="calculateRate">
+          Calculate Price
+        </button>
+
+        <button
+          type="submit"
+          class="btn primary">
+          Save Service
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+
+/* ============================================================
+   FIREBASE
+   ============================================================ */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  update,
+  push
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDWwDBsK6VZrImUi3--NEQh7aCUll-U2CQ",
+  authDomain: "smm-maruf.firebaseapp.com",
+  databaseURL: "https://smm-maruf-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "smm-maruf",
+  storageBucket: "smm-maruf.firebasestorage.app",
+  messagingSenderId: "435621412426",
+  appId: "1:435621412426:web:a961bf3ce369a48e7930b3",
+  measurementId: "G-36DCJLWC27"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+let adminUser = null;
+let adminProfile = {};
+let settings = {};
+let users = {};
+let services = {};
+let orders = {};
+let payments = {};
+let tickets = {};
+
+const $ = id => document.getElementById(id);
+
+function money(n){
+  return Number(n || 0).toFixed(2);
+}
+
+function esc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function toast(msg){
+
+  $("toast").textContent = msg;
+  $("toast").style.display = "block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(()=>{
+      $("toast").style.display = "none";
+    },3000);
+}
+
+
+/* ============================================================
+   ADMIN AUTH
+   ============================================================ */
+
+$("loginForm").addEventListener("submit",async e=>{
+
+  e.preventDefault();
+
+  try{
+
+    await signInWithEmailAndPassword(
+      auth,
+      $("email").value.trim(),
+      $("password").value
+    );
+
+  }catch(error){
+
+    toast(error.message);
+
+  }
+
+});
+
+
+$("logout").addEventListener(
+  "click",
+  ()=>signOut(auth)
+);
+
+
+/* ============================================================
+   AUTH STATE + ADMIN ROLE
+   ============================================================ */
+
+onAuthStateChanged(auth,async user=>{
+
+  if(!user){
+
+    adminUser = null;
+
+    $("authScreen").style.display = "flex";
+    $("app").style.display = "none";
+
+    return;
+  }
+
+  const snap =
+    await get(ref(db,"users/"+user.uid));
+
+  if(!snap.exists() ||
+     snap.val().role !== "admin"){
+
+    toast("This account does not have admin access.");
+
+    await signOut(auth);
+
+    return;
+  }
+
+  adminUser = user;
+  adminProfile = snap.val();
+
+  $("authScreen").style.display = "none";
+  $("app").style.display = "block";
+
+  $("adminEmail").textContent =
+    user.email || "Administrator";
+
+  $("avatar").textContent =
+    (user.displayName ||
+     user.email ||
+     "A").charAt(0).toUpperCase();
+
+  await loadEverything();
+
+});
+
+
+/* ============================================================
+   LOAD DATA
+   ============================================================ */
+
+async function loadEverything(){
+
+  await loadSettings();
+
+  const usersSnap =
+    await get(ref(db,"users"));
+
+  users =
+    usersSnap.exists()
+    ? usersSnap.val()
+    : {};
+
+  const servicesSnap =
+    await get(ref(db,"services"));
+
+  services =
+    servicesSnap.exists()
+    ? servicesSnap.val()
+    : {};
+
+  const ordersSnap =
+    await get(ref(db,"orders"));
+
+  orders =
+    ordersSnap.exists()
+    ? ordersSnap.val()
+    : {};
+
+  const paymentsSnap =
+    await get(ref(db,"payments"));
+
+  payments =
+    paymentsSnap.exists()
+    ? paymentsSnap.val()
+    : {};
+
+  const ticketsSnap =
+    await get(ref(db,"tickets"));
+
+  tickets =
+    ticketsSnap.exists()
+    ? ticketsSnap.val()
+    : {};
+
+  renderDashboard();
+  renderOrders();
+  renderServices();
+  renderUsers();
+  renderPayments();
+  renderTickets();
+  loadSettingsForm();
+
+}
+
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+
+async function loadSettings(){
+
+  const snap =
+    await get(ref(db,"settings"));
+
+  settings =
+    snap.exists()
+    ? snap.val()
+    : {};
+
+  applyBranding();
+
+}
+
+
+function applyBranding(){
+
+  const name =
+    settings.siteName ||
+    "4X SMM OFFICIAL";
+
+  const logo =
+    settings.logoUrl ||
+    "https://placehold.co/100x100/6c5ce7/ffffff?text=4X";
+
+  $("siteName").textContent = name;
+  $("sideLogo").src = logo;
+  $("authLogo").src = logo;
+  document.title = name + " — Admin";
+
+  if(settings.primaryColor){
+
+    document.documentElement.style
+      .setProperty(
+        "--primary",
+        settings.primaryColor
+      );
+
+  }
+
+}
+
+
+function loadSettingsForm(){
+
+  $("siteNameInput").value =
+    settings.siteName ||
+    "4X SMM OFFICIAL";
+
+  $("logoUrl").value =
+    settings.logoUrl || "";
+
+  $("faviconUrl").value =
+    settings.faviconUrl || "";
+
+  $("primaryColor").value =
+    settings.primaryColor ||
+    "#6c5ce7";
+
+  $("bkash").value =
+    settings.payment?.bkash || "";
+
+  $("nagad").value =
+    settings.payment?.nagad || "";
+
+  $("rocket").value =
+    settings.payment?.rocket || "";
+
+  $("paymentInstructions").value =
+    settings.paymentInstructions || "";
+
+  $("globalProfit").value =
+    settings.globalProfit ?? 20;
+
+}
+
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+
+function flattenOrders(){
+
+  const list = [];
+
+  Object.entries(orders).forEach(
+    ([uid,userOrders])=>{
+
+      Object.entries(userOrders || {}).forEach(
+        ([id,order])=>{
+
+          list.push({
+            id,
+            uid,
+            ...order
+          });
+
+        }
+      );
+
+    }
+  );
+
+  return list;
+
+}
+
+
+function renderDashboard(){
+
+  const orderList =
+    flattenOrders();
+
+  const userCount =
+    Object.keys(users).length;
+
+  let revenue = 0;
+  let profit = 0;
+
+  orderList.forEach(o=>{
+
+    revenue += Number(o.amount || 0);
+
+    profit += Number(
+      o.profit ??
+      ((o.amount || 0) -
+       (o.providerCost || 0))
+    );
+
+  });
+
+  $("statUsers").textContent =
+    userCount;
+
+  $("statOrders").textContent =
+    orderList.length;
+
+  $("statRevenue").textContent =
+    money(revenue);
+
+  $("statProfit").textContent =
+    money(profit);
+
+
+  const recent =
+    orderList
+      .sort((a,b)=>
+        Number(b.createdAt || 0) -
+        Number(a.createdAt || 0)
+      )
+      .slice(0,8);
+
+  $("recentOrders").innerHTML =
+    recent.length
+    ? recent.map(o=>`
+
+      <tr>
+
+        <td>#${esc(o.id)}</td>
+
+        <td>
+          ${esc(users[o.uid]?.email || o.uid)}
+        </td>
+
+        <td>
+          ৳${money(o.amount)}
+        </td>
+
+        <td>
+          <span class="badge ${statusBadge(o.status)}">
+            ${esc(o.status || "Pending")}
+          </span>
+        </td>
+
+      </tr>
+
+    `).join("")
+    : `<tr><td colspan="4">No orders.</td></tr>`;
+
+}
+
+
+function statusBadge(status){
+
+  const s =
+    String(status || "").toLowerCase();
+
+  if(s.includes("complete"))
+    return "green";
+
+  if(s.includes("process") ||
+     s.includes("progress"))
+    return "blue";
+
+  if(s.includes("cancel") ||
+     s.includes("fail"))
+    return "red";
+
+  return "yellow";
+
+}
+
+
+/* ============================================================
+   ORDERS
+   ============================================================ */
+
+function renderOrders(){
+
+  let list =
+    flattenOrders();
+
+  const query =
+    ($("orderSearch")?.value || "")
+      .toLowerCase();
+
+  if(query){
+
+    list = list.filter(o=>
+
+      String(o.id).toLowerCase().includes(query) ||
+
+      String(users[o.uid]?.email || "")
+        .toLowerCase()
+        .includes(query) ||
+
+      String(o.serviceName || "")
+        .toLowerCase()
+        .includes(query)
+
+    );
+
+  }
+
+  $("ordersTable").innerHTML =
+    list.map(o=>`
+
+      <tr>
+
+        <td>#${esc(o.id)}</td>
+
+        <td>
+          ${esc(users[o.uid]?.email || "-")}
+        </td>
+
+        <td>
+          ${esc(o.serviceName || "-")}
+        </td>
+
+        <td>${esc(o.quantity || 0)}</td>
+
+        <td>৳${money(o.amount)}</td>
+
+        <td>
+          ৳${money(
+            o.profit ??
+            ((o.amount || 0) -
+             (o.providerCost || 0))
+          )}
+        </td>
+
+        <td>
+          <span class="badge ${statusBadge(o.status)}">
+            ${esc(o.status || "Pending")}
+          </span>
+        </td>
+
+        <td>
+
+          <div class="actions">
+
+            <button
+              class="btn small secondary"
+              onclick="changeOrderStatus(
+                '${esc(o.uid)}',
+                '${esc(o.id)}'
+              )">
+              Status
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `).join("") ||
+    `<tr>
+      <td colspan="8">
+        No orders found.
+      </td>
+    </tr>`;
+
+}
+
+
+$("orderSearch").addEventListener(
+  "input",
+  renderOrders
+);
+
+$("refreshOrders").addEventListener(
+  "click",
+  async()=>{
+    await loadEverything();
+    toast("Orders refreshed.");
+  }
+);
+
+
+/* ============================================================
+   ORDER STATUS
+   ============================================================ */
+
+window.changeOrderStatus =
+async function(uid,id){
+
+  const order =
+    orders[uid]?.[id];
+
+  if(!order) return;
+
+  const status =
+    prompt(
+      "Enter status:",
+      order.status || "Pending"
+    );
+
+  if(!status) return;
+
+  await update(
+    ref(db,`orders/${uid}/${id}`),
+    {
+      status,
+      statusSource:"manual",
+      updatedAt:Date.now()
+    }
+  );
+
+  await loadEverything();
+
+  toast("Order status updated.");
+
+};
+
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+
+function renderServices(){
+
+  let list =
+    Object.entries(services)
+      .map(([id,s])=>({
+        id,
+        ...s
+      }));
+
+  const q =
+    ($("serviceSearch")?.value || "")
+      .toLowerCase();
+
+  if(q){
+
+    list = list.filter(s=>
+      String(s.name || "")
+        .toLowerCase()
+        .includes(q)
+    );
+
+  }
+
+  $("servicesTable").innerHTML =
+    list.map(s=>`
+
+      <tr>
+
+        <td>${esc(s.id)}</td>
+
+        <td>
+          <strong>${esc(s.name || "-")}</strong>
+          <div class="muted">
+            ${esc(s.category || "General")}
+          </div>
+        </td>
+
+        <td>
+          ${esc(s.provider || "-")}
+        </td>
+
+        <td>
+          ৳${money(s.cost)}
+        </td>
+
+        <td>
+          ${money(s.profitPercent || 0)}%
+        </td>
+
+        <td>
+          <strong>
+            ৳${money(s.rate)}
+          </strong>
+        </td>
+
+        <td>
+          <span class="badge ${
+            s.enabled === false
+            ? "red"
+            : "green"
+          }">
+            ${s.enabled === false
+            ? "OFF"
+            : "ON"}
+          </span>
+        </td>
+
+        <td>
+
+          <div class="actions">
+
+            <button
+              class="btn small secondary"
+              onclick="editService('${esc(s.id)}')">
+              Edit
+            </button>
+
+            <button
+              class="btn small ${
+                s.enabled === false
+                ? "success"
+                : "warning"
+              }"
+              onclick="toggleService('${esc(s.id)}')">
+              ${s.enabled === false
+                ? "Enable"
+                : "Disable"}
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick="deleteService('${esc(s.id)}')">
+              Delete
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `).join("") ||
+    `<tr>
+      <td colspan="8">No services.</td>
+    </tr>`;
+
+}
+
+
+$("serviceSearch").addEventListener(
+  "input",
+  renderServices
+);
+
+
+$("addService").addEventListener(
+  "click",
+  ()=>{
+
+    $("serviceForm").reset();
+
+    $("editServiceId").value = "";
+
+    $("serviceProfit").value =
+      settings.globalProfit ?? 20;
+
+    $("serviceModal")
+      .classList.add("show");
+
+  }
+);
+
+
+window.closeServiceModal =
+function(){
+
+  $("serviceModal")
+    .classList.remove("show");
+
+};
+
+
+window.editService =
+function(id){
+
+  const s = services[id];
+
+  if(!s) return;
+
+  $("editServiceId").value = id;
+  $("serviceName").value = s.name || "";
+  $("serviceCategory").value =
+    s.category || "";
+  $("serviceProvider").value =
+    s.provider || "";
+  $("providerServiceId").value =
+    s.providerServiceId || "";
+  $("serviceCost").value =
+    s.cost || 0;
+  $("serviceProfit").value =
+    s.profitPercent ?? 20;
+  $("serviceRate").value =
+    s.rate || 0;
+  $("serviceMin").value =
+    s.min || 10;
+  $("serviceMax").value =
+    s.max || 10000;
+
+  $("serviceModal")
+    .classList.add("show");
+
+};
+
+
+$("calculateRate").addEventListener(
+  "click",
+  ()=>{
+
+    const cost =
+      Number($("serviceCost").value || 0);
+
+    const profit =
+      Number($("serviceProfit").value || 0);
+
+    $("serviceRate").value =
+      (cost * (1 + profit / 100))
+        .toFixed(4);
+
+  }
+);
+
+
+$("serviceForm").addEventListener(
+  "submit",
+  async e=>{
+
+    e.preventDefault();
+
+    const id =
+      $("editServiceId").value ||
+      push(ref(db,"services")).key;
+
+    const cost =
+      Number($("serviceCost").value || 0);
+
+    const profit =
+      Number($("serviceProfit").value || 0);
+
+    const rate =
+      Number($("serviceRate").value || 0);
+
+    await set(
+      ref(db,"services/"+id),
+      {
+        name:$("serviceName").value.trim(),
+        category:$("serviceCategory").value.trim(),
+        provider:$("serviceProvider").value.trim(),
+        providerServiceId:
+          $("providerServiceId").value.trim(),
+        cost,
+        profitPercent:profit,
+        rate,
+        min:Number($("serviceMin").value || 1),
+        max:Number($("serviceMax").value || 0),
+        enabled:true,
+        updatedAt:Date.now()
+      }
+    );
+
+    closeServiceModal();
+
+    await loadEverything();
+
+    toast("Service saved.");
+
+  }
+);
+
+
+window.toggleService =
+async function(id){
+
+  const service =
+    services[id];
+
+  if(!service) return;
+
+  await update(
+    ref(db,"services/"+id),
+    {
+      enabled:service.enabled === false,
+      updatedAt:Date.now()
+    }
+  );
+
+  await loadEverything();
+
+};
+
+
+window.deleteService =
+async function(id){
+
+  if(!confirm(
+    "Delete this service?"
+  )) return;
+
+  /*
+   * For production, use a protected
+   * server-side delete route.
+   */
+
+  await set(
+    ref(db,"services/"+id),
+    null
+  );
+
+  await loadEverything();
+
+  toast("Service deleted.");
+
+};
+
+
+/* ============================================================
+   PROVIDER SETTINGS
+   ============================================================ */
+
+let smmEnabled = false;
+
+$("smmEnabled").addEventListener(
+  "click",
+  ()=>{
+
+    smmEnabled = !smmEnabled;
+
+    $("smmEnabled")
+      .classList.toggle(
+        "on",
+        smmEnabled
+      );
+
+  }
+);
+
+
+$("saveSmm").addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      const response =
+        await fetch("/api/admin/provider",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+
+            provider:"smmgen",
+
+            name:$("smmName").value,
+
+            apiUrl:$("smmUrl").value,
+
+            apiKey:$("smmKey").value,
+
+            enabled:smmEnabled
+
+          })
+        });
+
+      if(!response.ok)
+        throw new Error();
+
+      $("smmStatus").textContent =
+        smmEnabled
+        ? "Connected"
+        : "Disabled";
+
+      $("smmStatus").className =
+        "badge " +
+        (smmEnabled ? "green" : "yellow");
+
+      toast("SMMGen settings saved.");
+
+    }catch{
+
+      toast(
+        "Backend provider endpoint is not configured yet."
+      );
+
+    }
+
+  }
+);
+
+
+$("testSmm").addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      const response =
+        await fetch("/api/admin/provider/test",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            provider:"smmgen"
+          })
+        });
+
+      const data =
+        await response.json();
+
+      if(!response.ok)
+        throw new Error(
+          data.message || "Connection failed"
+        );
+
+      $("smmStatus").textContent =
+        "Connected";
+
+      $("smmStatus").className =
+        "badge green";
+
+      toast("SMMGen connection successful.");
+
+    }catch(error){
+
+      toast(
+        "Connection test requires the Vercel backend."
+      );
+
+    }
+
+  }
+);
+
+
+$("syncSmm").addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      const response =
+        await fetch("/api/admin/provider/sync",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            provider:"smmgen"
+          })
+        });
+
+      if(!response.ok)
+        throw new Error();
+
+      await loadEverything();
+
+      toast("Service sync completed.");
+
+    }catch{
+
+      toast(
+        "Provider sync backend is not configured yet."
+      );
+
+    }
+
+  }
+);
+
+
+$("syncServices").addEventListener(
+  "click",
+  ()=>{
+    $("syncSmm").click();
+  }
+);
+
+
+/* ============================================================
+   ZINIPAY
+   ============================================================ */
+
+$("saveZini").addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      const response =
+        await fetch("/api/admin/payment-gateway",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+
+            provider:"zinipay",
+
+            apiUrl:$("ziniUrl").value,
+
+            credential:$("ziniKey").value
+
+          })
+        });
+
+      if(!response.ok)
+        throw new Error();
+
+      $("ziniStatus").textContent =
+        "Connected";
+
+      $("ziniStatus").className =
+        "badge green";
+
+      toast("ZiniPay settings saved.");
+
+    }catch{
+
+      toast(
+        "Payment gateway backend is not configured yet."
+      );
+
+    }
+
+  }
+);
+
+
+$("testZini").addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      const response =
+        await fetch("/api/admin/payment-gateway/test",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            provider:"zinipay"
+          })
+        });
+
+      if(!response.ok)
+        throw new Error();
+
+      $("ziniStatus").textContent =
+        "Connected";
+
+      $("ziniStatus").className =
+        "badge green";
+
+      toast("ZiniPay connection successful.");
+
+    }catch{
+
+      toast(
+        "ZiniPay backend endpoint is not configured yet."
+      );
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   BRANDING
+   ============================================================ */
+
+$("saveBranding").addEventListener(
+  "click",
+  async()=>{
+
+    await update(
+      ref(db,"settings"),
+      {
+        siteName:
+          $("siteNameInput").value.trim() ||
+          "4X SMM OFFICIAL",
+
+        logoUrl:
+          $("logoUrl").value.trim(),
+
+        faviconUrl:
+          $("faviconUrl").value.trim(),
+
+        primaryColor:
+          $("primaryColor").value.trim(),
+
+        updatedAt:Date.now()
+      }
+    );
+
+    await loadSettings();
+
+    toast("Branding updated.");
+
+  }
+);
+
+
+/* ============================================================
+   MANUAL PAYMENT SETTINGS
+   ============================================================ */
+
+$("savePayments").addEventListener(
+  "click",
+  async()=>{
+
+    await update(
+      ref(db,"settings"),
+      {
+
+        payment:{
+          bkash:$("bkash").value.trim(),
+          nagad:$("nagad").value.trim(),
+          rocket:$("rocket").value.trim()
+        },
+
+        paymentInstructions:
+          $("paymentInstructions").value.trim(),
+
+        updatedAt:Date.now()
+
+      }
+    );
+
+    await loadSettings();
+
+    toast("Payment settings saved.");
+
+  }
+);
+
+
+/* ============================================================
+   USERS
+   ============================================================ */
+
+function renderUsers(){
+
+  const query =
+    ($("userSearch")?.value || "")
+      .toLowerCase();
+
+  const list =
+    Object.entries(users)
+      .map(([uid,u])=>({
+        uid,
+        ...u
+      }))
+      .filter(u=>{
+
+        if(!query) return true;
+
+        return (
+          String(u.name || "")
+            .toLowerCase()
+            .includes(query) ||
+
+          String(u.email || "")
+            .toLowerCase()
+            .includes(query)
+        );
+
+      });
+
+  $("usersTable").innerHTML =
+    list.map(u=>`
+
+      <tr>
+
+        <td>
+          <strong>
+            ${esc(u.name || "User")}
+          </strong>
+        </td>
+
+        <td>${esc(u.email || "-")}</td>
+
+        <td>
+          ৳${money(u.balance)}
+        </td>
+
+        <td>
+          <span class="badge purple">
+            ${esc(u.role || "user")}
+          </span>
+        </td>
+
+        <td>
+          <span class="badge green">
+            Active
+          </span>
+        </td>
+
+        <td>
+
+          <button
+            class="btn small secondary"
+            onclick="adjustBalance('${esc(u.uid)}')">
+            Balance
+          </button>
+
+        </td>
+
+      </tr>
+
+    `).join("") ||
+    `<tr><td colspan="6">No users.</td></tr>`;
+
+}
+
+
+$("userSearch").addEventListener(
+  "input",
+  renderUsers
+);
+
+
+window.adjustBalance =
+async function(uid){
+
+  const user = users[uid];
+
+  if(!user) return;
+
+  const amount =
+    Number(prompt(
+      "Enter amount to add/subtract.\nExample: 100 or -50"
+    ));
+
+  if(!Number.isFinite(amount))
+    return;
+
+  const newBalance =
+    Number(user.balance || 0) + amount;
+
+  await update(
+    ref(db,"users/"+uid),
+    {
+      balance:newBalance,
+      updatedAt:Date.now()
+    }
+  );
+
+  await loadEverything();
+
+  toast("Balance updated.");
+
+};
+
+
+/* ============================================================
+   PAYMENTS
+   ============================================================ */
+
+function flattenPayments(){
+
+  const list = [];
+
+  Object.entries(payments).forEach(
+    ([uid,userPayments])=>{
+
+      Object.entries(userPayments || {})
+        .forEach(([id,payment])=>{
+
+          list.push({
+            id,
+            uid,
+            ...payment
+          });
+
+        });
+
+    }
+  );
+
+  return list;
+
+}
+
+
+function renderPayments(){
+
+  const list =
+    flattenPayments()
+      .sort((a,b)=>
+        Number(b.createdAt || 0) -
+        Number(a.createdAt || 0)
+      );
+
+  $("paymentsTable").innerHTML =
+    list.map(p=>`
+
+      <tr>
+
+        <td>
+          ${esc(users[p.uid]?.email || p.uid)}
+        </td>
+
+        <td>
+          ${esc(p.method || "-")}
+        </td>
+
+        <td>
+          ৳${money(p.amount)}
+        </td>
+
+        <td>
+          ${esc(p.trxId || "-")}
+        </td>
+
+        <td>
+          <span class="badge ${statusBadge(p.status)}">
+            ${esc(p.status || "Pending")}
+          </span>
+        </td>
+
+        <td>
+
+          ${
+            String(p.status).toLowerCase() === "pending"
+            ? `
+              <div class="actions">
+
+                <button
+                  class="btn small success"
+                  onclick="approvePayment(
+                    '${esc(p.uid)}',
+                    '${esc(p.id)}'
+                  )">
+                  Approve
+                </button>
+
+                <button
+                  class="btn small danger"
+                  onclick="rejectPayment(
+                    '${esc(p.uid)}',
+                    '${esc(p.id)}'
+                  )">
+                  Reject
+                </button>
+
+              </div>
+            `
+            : "-"
+          }
+
+        </td>
+
+      </tr>
+
+    `).join("") ||
+    `<tr>
+      <td colspan="6">No payments.</td>
+    </tr>`;
+
+}
+
+
+window.approvePayment =
+async function(uid,id){
+
+  const payment =
+    payments[uid]?.[id];
+
+  if(!payment) return;
+
+  if(payment.status !== "Pending")
+    return;
+
+  const amount =
+    Number(payment.amount || 0);
+
+  const user =
+    users[uid];
+
+  if(!user) return;
+
+  await update(
+    ref(db,"users/"+uid),
+    {
+      balance:
+        Number(user.balance || 0) +
+        amount
+    }
+  );
+
+  await update(
+    ref(db,`payments/${uid}/${id}`),
+    {
+      status:"Approved",
+      approvedAt:Date.now(),
+      approvedBy:adminUser.uid
+    }
+  );
+
+  const txRef =
+    push(ref(db,"transactions/"+uid));
+
+  await set(txRef,{
+    type:"deposit",
+    amount,
+    method:payment.method,
+    paymentId:id,
+    status:"completed",
+    createdAt:Date.now()
+  });
+
+  await loadEverything();
+
+  toast("Payment approved.");
+
+};
+
+
+window.rejectPayment =
+async function(uid,id){
+
+  await update(
+    ref(db,`payments/${uid}/${id}`),
+    {
+      status:"Rejected",
+      rejectedAt:Date.now(),
+      rejectedBy:adminUser.uid
+    }
+  );
+
+  await loadEverything();
+
+  toast("Payment rejected.");
+
+};
+
+
+/* ============================================================
+   SUPPORT
+   ============================================================ */
+
+function flattenTickets(){
+
+  const list = [];
+
+  Object.entries(tickets).forEach(
+    ([uid,userTickets])=>{
+
+      Object.entries(userTickets || {})
+        .forEach(([id,ticket])=>{
+
+          list.push({
+            id,
+            uid,
+            ...ticket
+          });
+
+        });
+
+    }
+  );
+
+  return list;
+
+}
+
+
+function renderTickets(){
+
+  const list =
+    flattenTickets()
+      .sort((a,b)=>
+        Number(b.createdAt || 0) -
+        Number(a.createdAt || 0)
+      );
+
+  $("ticketsTable").innerHTML =
+    list.map(t=>`
+
+      <tr>
+
+        <td>#${esc(t.id)}</td>
+
+        <td>
+          ${esc(users[t.uid]?.email || "-")}
+        </td>
+
+        <td>
+          ${esc(t.subject || "-")}
+        </td>
+
+        <td>
+          <span class="badge ${statusBadge(t.status)}">
+            ${esc(t.status || "Open")}
+          </span>
+        </td>
+
+        <td>
+          ${t.createdAt
+            ? new Date(t.createdAt)
+              .toLocaleDateString()
+            : "-"}
+        </td>
+
+        <td>
+
+          <button
+            class="btn small secondary"
+            onclick="closeTicket(
+              '${esc(t.uid)}',
+              '${esc(t.id)}'
+            )">
+            Close
+          </button>
+
+        </td>
+
+      </tr>
+
+    `).join("") ||
+    `<tr>
+      <td colspan="6">No tickets.</td>
+    </tr>`;
+
+}
+
+
+window.closeTicket =
+async function(uid,id){
+
+  await update(
+    ref(db,`tickets/${uid}/${id}`),
+    {
+      status:"Closed",
+      closedAt:Date.now()
+    }
+  );
+
+  await loadEverything();
+
+  toast("Ticket closed.");
+
+};
+
+
+/* ============================================================
+   PROFIT
+   ============================================================ */
+
+$("saveProfit").addEventListener(
+  "click",
+  async()=>{
+
+    const value =
+      Number($("globalProfit").value || 0);
+
+    await update(
+      ref(db,"settings"),
+      {
+        globalProfit:value,
+        updatedAt:Date.now()
+      }
+    );
+
+    settings.globalProfit = value;
+
+    toast("Global profit updated.");
+
+  }
+);
+
+
+function calculateProfitPreview(){
+
+  const cost =
+    Number($("profitCost").value || 0);
+
+  const percent =
+    Number($("profitPercent").value || 0);
+
+  const profit =
+    cost * percent / 100;
+
+  $("calculatedProfit").textContent =
+    money(profit);
+
+  $("calculatedPrice").textContent =
+    money(cost + profit);
+
+}
+
+
+$("profitCost").addEventListener(
+  "input",
+  calculateProfitPreview
+);
+
+$("profitPercent").addEventListener(
+  "input",
+  calculateProfitPreview
+);
+
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+const pages = {
+
+  dashboard:[
+    "Dashboard",
+    "Manage your SMM business."
+  ],
+
+  orders:[
+    "Orders",
+    "Manage customer orders."
+  ],
+
+  services:[
+    "Services",
+    "Manage services and pricing."
+  ],
+
+  providers:[
+    "API Providers",
+    "Connect SMM providers and payment gateways."
+  ],
+
+  users:[
+    "Users",
+    "Manage customer accounts."
+  ],
+
+  payments:[
+    "Payments",
+    "Manage deposits and transactions."
+  ],
+
+  settings:[
+    "Site Settings",
+    "Configure branding and manual payments."
+  ],
+
+  api:[
+    "Panel API",
+    "Manage your reseller API."
+  ],
+
+  profit:[
+    "Profit Manager",
+    "Manage service markup and pricing."
+  ],
+
+  support:[
+    "Support Tickets",
+    "Manage customer support requests."
+  ]
+
+};
+
+
+window.openView =
+function(view){
+
+  document.querySelectorAll(".view")
+    .forEach(v =>
+      v.classList.remove("active")
+    );
+
+  $("view-"+view)
+    ?.classList.add("active");
+
+  document.querySelectorAll(".nav")
+    .forEach(n =>
+      n.classList.toggle(
+        "active",
+        n.dataset.view === view
+      )
+    );
+
+  const data =
+    pages[view] ||
+    ["Dashboard",""];
+
+  $("pageTitle").textContent =
+    data[0];
+
+  $("pageSub").textContent =
+    data[1];
+
+  $("sidebar")
+    .classList.remove("open");
+
+};
+
+
+document.querySelectorAll(".nav")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+        if(button.dataset.view)
+          openView(button.dataset.view);
+      }
+    );
+
+  });
+
+
+$("menuBtn").addEventListener(
+  "click",
+  ()=>{
+    $("sidebar")
+      .classList.toggle("open");
+  }
+);
+
+</script>
+
+</body>
+</html>
